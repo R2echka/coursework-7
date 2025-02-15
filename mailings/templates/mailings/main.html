@@ -1,0 +1,50 @@
+{% extends 'mailings/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        {% if user.is_authenticated %}
+        <div class="col-10 col-md">
+            <div class="card border-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.username }}</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Рассылок: {{ user.mailings }}</li>
+                    <li class="list-group-item">Из них активных: {{ active_mailings_number }}</li>   
+                    <li class="list-group-item">Уникальных получателей: {{ unique_recipients }}</li>
+                    <li class="list-group-item">Отправлено сообщений: {{ messages_count }}</li>
+                    <li class="list-group-item">Успешных рассылок: {{ successful_attempts }}</li>
+                    <li class="list-group-item">Неуспешных рассылок: {{ unsuccessful_attempts }}</li>
+                </ul>
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                    <a type="button" class="btn btn-outline-primary" href="mailing/new">Добавить рассылку</a>
+                    <a type="button" class="btn btn-outline-primary" href="message/new">Добавить сообщение</a>
+                    <a type="button" class="btn btn-outline-primary" href="recipient/new">Добавить получателя</a>
+                </div>
+            </div>  
+        </div>
+        {% endif %}
+        <div class="col-12 col-md">
+            {% for mailing in mailings %}
+            {% if user == mailing.owner %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Mailing {{ mailing.pk }}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{{ mailing.status }}</h6>
+                    <p class="card-text">{{ mailing.message|truncatechars:100 }}</p>
+                    <nav class="navbar bg-dark border-bottom border-body">
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <a type="button" class="btn btn-outline-primary" href="{% url 'mailing' mailing.pk %}">Подробнее</a>
+                            <a type="button" class="btn btn-outline-primary" href="{% url 'update_mailing' mailing.pk %}">Изменить</a>
+                            <a type="button" class="btn btn-outline-primary" href="{% url 'delete_mailing' mailing.pk %}">Удалить</a>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

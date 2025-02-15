@@ -1,0 +1,50 @@
+{% extends 'mailings/base.html' %}
+
+{% block content %}
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">Mailing {{ mailing.pk }}</h5>
+                {% if mailing.status == 'active' %}
+                <p class="card-text"><small class="text-body-secondary">Запущена {{ mailing.starting_time }}</small></p>
+                {% elif mailing.status == 'completed' %}
+                <p class="card-text"><small class="text-body-secondary">Запущена {{ mailing.starting_time }}</small></p>
+                <p class="card-text"><small class="text-body-secondary">Завершена {{ mailing.ending_time }}</small></p>
+                {% endif %}
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                {% for recipient in mailing.recipients.all %}
+                    {{ recipient }},
+                {% endfor %}
+                </li>
+                <li class="list-group-item">{{ mailing.message }}</li>
+            </ul>
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                <a type="button" class="btn btn-outline-primary" href="/">На главную</a>
+                {% if mailing.status == 'created' and user == mailing.owner %}
+                <form method="post" action="{% url 'mailing' mailing.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary">Запустить рассылку</button>
+                </form>
+                {% elif mailing.status == 'active' and user == mailing.owner %}
+                <form method="post" action="{% url 'mailing' mailing.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary">Завершить рассылку</button>
+                </form>
+                {% elif perms.mailings.can_disable_mailing and user != mailing.owner and  mailing.status == 'active'%}
+                <form method="post" action="{% url 'mailing' mailing.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary">Отключить рассылку</button>
+                </form>
+                {% endif %}
+                {% if user == mailing.owner %}
+                <a type="button" class="btn btn-outline-primary" href="{% url 'update_mailing' mailing.pk %}">Изменить</a>
+                <a type="button" class="btn btn-outline-primary" href="{% url 'delete_mailing' mailing.pk %}">Удалить</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

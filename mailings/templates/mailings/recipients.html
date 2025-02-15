@@ -1,0 +1,28 @@
+{% extends 'mailings/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-12 col-md">
+        {% for recipient in recipient %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ recipient.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{{ recipient.email }}</h6>
+                    <p class="card-text">{{ recipient.comment|truncatechars:100 }}</p>
+                    <nav class="navbar bg-dark border-bottom border-body">
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <a type="button" class="btn btn-outline-primary" href="{% url 'recipient' recipient.pk %}">Подробнее</a>
+                            {% if user == mailing.owner %}
+                            <a type="button" class="btn btn-outline-primary" href="{% url 'update_recipient' recipient.pk %}">Изменить</a>
+                            <a type="button" class="btn btn-outline-primary" href="{% url 'delete_recipient' recipient.pk %}">Удалить</a>
+                            {% endif %}
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
