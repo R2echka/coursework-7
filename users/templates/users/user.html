@@ -1,0 +1,20 @@
+{% extends 'mailings/base.html' %}
+
+{% block content %}
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{ custom_user.username }}</h5>
+                <p class="card-text"><small class="text-body-secondary">{{ custom_user.email }}</small></p>
+            </div>
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                <a type="button" class="btn btn-outline-primary" href="/">На главную</a>
+                <form method="post">
+                    <button type="submit" class="btn btn-outline-primary" href="">Заблокировать</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

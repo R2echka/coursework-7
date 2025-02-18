@@ -1,0 +1,27 @@
+{% extends 'mailings/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-12 col-md">
+        {% for message in messages %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"> {{ message.subject }}</h5>
+                    <p class="card-text">{{ message.text|truncatechars:100 }}</p>
+                    <nav class="navbar bg-dark border-bottom border-body">
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <a type="button" class="btn btn-outline-primary" href="{% url 'message' message.pk %}">Подробнее</a>
+                            {% if user == mailing.owner %}
+                            <a type="button" class="btn btn-outline-primary" href="{% url 'update_message' message.pk %}">Изменить</a>
+                            <a type="button" class="btn btn-outline-primary" href="{% url 'delete_message' message.pk %}">Удалить</a>
+                            {% endif %}
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'mailings/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-12 col-md">
+        {% for custom_user in users %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"> {{ custom_user.username }}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{{ custom_user.email }}</h6>
+                    <nav class="navbar bg-dark border-bottom border-body">
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <form action="{% url 'users:block_user' custom_user.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-primary">
+                                    {% if custom_user.is_active %}Блокировать{% else %}Разблокировать{% endif %}
+                                </button>
+                            </form>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

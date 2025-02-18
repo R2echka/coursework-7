@@ -1,0 +1,26 @@
+{% extends 'mailings/base.html' %}
+
+{% block content %}
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{ recipient.name }}</h5>
+                <p class="card-text"><small class="text-body-secondary">{{ recipient.email }}</small></p>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% if user.comment %}
+                <li class="list-group-item">{{ recipient.comment }}</li>
+                {% else %}
+                <li class="list-group-item">Комментария к получателю нет.</li>
+                {% endif %}
+            </ul>
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                <a type="button" class="btn btn-outline-primary" href="/">На главную</a>
+                <a type="button" class="btn btn-outline-primary" href="{% url 'update_recipient' recipient.pk %}">Изменить</a>
+                <a type="button" class="btn btn-outline-primary" href="{% url 'delete_recipient' recipient.pk %}">Удалить</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
